@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор для визначення часу опромінення</title>
+    <style>
+        /* Стилі для адаптивності та збільшення шрифту для смартфонів */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            font-size: 18px; /* Базовий збільшений шрифт для мобільних */
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #4a4a4a;
+            text-align: center;
+            font-size: 1.5em; /* Збільшений заголовок */
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        input[type="number"], select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1em; /* Збільшений шрифт у полях введення */
+        }
+
+        /* Стилі для кнопок */
+        .button-group button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        /* Кнопка "Очистити" (Світло-сірий колір) */
+        #clearButton {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+        #clearButton:hover {
+            background-color: #cccccc;
+        }
+
+        /* Кнопка "Розрахувати" (Зелений колір) */
+        #calculateButton {
+            background-color: #4CAF50; /* Зелений */
+            color: white;
+            margin-bottom: 20px;
+        }
+        #calculateButton:hover {
+            background-color: #45a049;
+        }
+
+        /* Стилі для результату */
+        #result {
+            background-color: #f0fff0;
+            border: 2px solid #4CAF50;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 25px;
+            text-align: center;
+        }
+        #result p {
+            margin: 5px 0;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>⏳ Калькулятор для визначення часу опромінення</h1>
+
+    <form id="radiationForm">
+        <label for="doseRate">Потужність дози за даними розвідки (мЗв/год):</label>
+        <input type="number" id="doseRate" step="0.001" min="0.001" required>
+
+        <label for="totalDose">Задана доза опромінення (мЗв):</label>
+        <input type="number" id="totalDose" step="0.01" min="0.01" required>
+
+        <label for="protectionFactor">Коефіцієнт захисту (Кз):</label>
+        <select id="protectionFactor" required>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="4">4</option>
+            <option value="10">10</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+
+        <div class="button-group">
+            <button type="submit" id="calculateButton">РОЗРАХУВАТИ</button>
+            <button type="button" id="clearButton">ОЧИСТИТИ</button>
+        </div>
+    </form>
+
+    <div id="result">
+        <p>Результат з'явиться тут.</p>
+    </div>
+</div>
+
+<script>
+    document.getElementById('radiationForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Запобігаємо стандартній відправці форми
+        calculateTime();
+    });
+
+    document.getElementById('clearButton').addEventListener('click', function() {
+        document.getElementById('radiationForm').reset();
+        document.getElementById('result').innerHTML = '<p>Результат з\'явиться тут.</p>';
+    });
+
+    /**
+     * Головна функція для розрахунку часу безпечного перебування.
+     */
+    function calculateTime() {
+        const doseRate = parseFloat(document.getElementById('doseRate').value); // Pt (мЗв/год)
+        const totalDose = parseFloat(document.getElementById('totalDose').value); // D (мЗв)
+        const protectionFactor = parseFloat(document.getElementById('protectionFactor').value); // Кз
+
+        const resultDiv = document.getElementById('result');
+
+        // Перевірка на коректність введених даних
+        if (isNaN(doseRate) || isNaN(totalDose) || doseRate <= 0 || totalDose <= 0) {
+            resultDiv.innerHTML = '<p style="color: red;">Помилка! Введіть коректні значення (> 0).</p>';
+            return;
+        }
+
+        // 1. Розрахунок фактичної потужності дози з урахуванням захисту
+        const actualDoseRate = doseRate / protectionFactor;
+
+        // 2. Розрахунок часу (у годинах)
+        const timeInHours = totalDose / actualDoseRate;
+
+        // 3. Конвертація годин у години та хвилини
+        const hours = Math.floor(timeInHours);
+        const minutesFloat = (timeInHours - hours) * 60;
+        const minutes = Math.round(minutesFloat);
+
+        // 4. Форматування та виведення результату
+        let outputHTML = `
+            <p><strong>✅ Результати розрахунку</strong></p>
+            <hr style="border-color: #ccc; width: 80%;">
+            <p>Потужність дози на місці: <br>
+               <span style="color: #007bff;">${actualDoseRate.toFixed(3)} мЗв/год</span></p>
+            <p><strong>Рекомендований час:</strong></p>
+            <p style="font-size: 1.4em; color: #4CAF50; margin: 15px 0;">
+                ${hours} год ${minutes} хв
+            </p>
+            <p style="font-size: 0.9em; color: #666;">
+                (${timeInHours.toFixed(2)} годин)
+            </p>
+        `;
+        resultDiv.innerHTML = outputHTML;
+    }
+</script>
+
+</body>
+</html>
