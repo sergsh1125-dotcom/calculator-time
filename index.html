@@ -98,7 +98,7 @@
     <h1>⏳ Калькулятор для визначення часу опромінення</h1>
 
     <form id="radiationForm">
-        <label for="doseRate">Потужність дози за даними розвідки (мЗв/год):</label>
+        <label for="doseRate">Потужність дози на місцевості за даними розвідки (мЗв/год):</label>
         <input type="number" id="doseRate" step="0.001" min="0.001" required>
 
         <label for="totalDose">Задана доза опромінення (мЗв):</label>
@@ -121,7 +121,7 @@
     </form>
 
     <div id="result">
-        <p>Результат з'явиться тут.</p>
+        <p>Результати розрахунку </p>
     </div>
 </div>
 
@@ -167,7 +167,7 @@
         let outputHTML = `
             <p><strong>✅ Результати розрахунку</strong></p>
             <hr style="border-color: #ccc; width: 80%;">
-            <p>Потужність дози на місці: <br>
+            <p>Потужність дози з урахуванням Кз: <br>
                <span style="color: #007bff;">${actualDoseRate.toFixed(3)} мЗв/год</span></p>
             <p><strong>Рекомендований час:</strong></p>
             <p style="font-size: 1.4em; color: #4CAF50; margin: 15px 0;">
