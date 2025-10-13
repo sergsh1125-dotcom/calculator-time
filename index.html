@@ -115,7 +115,7 @@
         </select>
 
         <div class="button-group">
-            <button type="submit" id="calculateButton">РОЗРАХУВАТИ</button>
+            <button type="submit" id="calculateButton">РОЗРАХУВАТИ ДОЗУ</button>
             <button type="button" id="clearButton">ОЧИСТИТИ</button>
         </div>
     </form>
@@ -133,7 +133,7 @@
 
     document.getElementById('clearButton').addEventListener('click', function() {
         document.getElementById('radiationForm').reset();
-        document.getElementById('result').innerHTML = '<p>Результат з\'явиться тут.</p>';
+        document.getElementById('result').innerHTML = '<p>Результати розрахунку.</p>';
     });
 
     /**
