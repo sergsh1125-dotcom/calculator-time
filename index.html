@@ -5,97 +5,133 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>КАЛЬКУЛЯТОР для визначення допустимого часу опромінення (при постійній потужності дози випромінювання) </title>
     <style>
-        /* Стилі для адаптивності та збільшення шрифту для смартфонів */
+        /* Стилізація під Платформу ХБРЯ інцидентів */
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
+            background-color: #0b0f19; /* Темний фон платформи */
+            color: #ffffff;
             margin: 0;
             padding: 20px;
-            font-size: 18px; /* Базовий збільшений шрифт для мобільних */
+            font-size: 18px;
         }
         .container {
             max-width: 500px;
             margin: auto;
-            background: #fff;
+            background: #121824; /* Темно-сіра підкладка блоків */
             padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #232d42;
+            border-radius: 4px; /* Мінімалістичні закруглення */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
         }
         h1 {
-            color: #4a4a4a;
+            color: #ffd700; /* Яскраво-жовтий фірмовий колір заголовків */
             text-align: center;
-            font-size: 1.5em; /* Збільшений заголовок */
+            font-size: 1.3em;
+            text-transform: uppercase;
             margin-bottom: 25px;
+            border-bottom: 2px solid #ffd700;
+            padding-bottom: 15px;
+            letter-spacing: 0.5px;
         }
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            font-size: 1.1em;
+            font-size: 1em;
+            color: #e2e8f0;
         }
         input[type="number"], select {
             width: 100%;
             padding: 12px;
             margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
+            background-color: #1a2333; /* Темне поле вводу */
+            border: 1px solid #ffd700; /* Жовтий контур */
+            border-radius: 4px;
             box-sizing: border-box;
-            font-size: 1em; /* Збільшений шрифт у полях введення */
+            font-size: 1em;
+            color: #ffffff;
+            outline: none;
+        }
+        input[type="number"]:focus, select:focus {
+            background-color: #202b3d;
+            box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
         }
 
-        /* Стилі для кнопок */
+        /* Стилі для кнопок у стилі ХБРЯ */
         .button-group button {
             width: 100%;
             padding: 15px;
             border: none;
-            border-radius: 8px;
-            font-size: 1.1em;
+            border-radius: 4px;
+            font-size: 1em;
             font-weight: bold;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.2s ease;
             margin-top: 10px;
+            letter-spacing: 1px;
         }
 
-        /* Кнопка "Очистити" (Світло-сірий колір) */
-        #clearButton {
-            background-color: #e0e0e0;
-            color: #333;
-        }
-        #clearButton:hover {
-            background-color: #cccccc;
-        }
-
-        /* Кнопка "Розрахувати" (Зелений колір) */
+        /* Головна кнопка дії — Жовта */
         #calculateButton {
-            background-color: #4CAF50; /* Зелений */
-            color: white;
-            margin-bottom: 20px;
+            background-color: #ffd700; 
+            color: #000000;
+            margin-bottom: 12px;
         }
         #calculateButton:hover {
-            background-color: #45a049;
+            background-color: #e6c200;
         }
 
-        /* Стилі для результату */
+        /* Кнопка "Очистити" — Червона, як на панелі платформи */
+        #clearButton {
+            background-color: #990000;
+            color: #ffffff;
+        }
+        #clearButton:hover {
+            background-color: #bd0000;
+        }
+
+        /* Інформаційне вікно результатів */
         #result {
-            background-color: #f0fff0;
-            border: 2px solid #4CAF50;
-            padding: 15px;
-            border-radius: 8px;
+            background-color: #172433; /* Синявий відтінок інформаційного вікна */
+            border: 1px solid #ffd700;
+            padding: 20px;
+            border-radius: 4px;
             margin-top: 25px;
             text-align: center;
         }
         #result p {
-            margin: 5px 0;
-            font-size: 1.2em;
+            margin: 8px 0;
+            font-size: 1.1em;
+        }
+        
+        /* Кольорові акценти для результатів */
+        .res-title {
+            color: #ffd700;
             font-weight: bold;
+            text-transform: uppercase;
+        }
+        .res-value {
+            color: #4da6ff; /* Світло-блакитний для проміжних значень */
+            font-weight: bold;
+        }
+        .res-final {
+            font-size: 1.5em !important;
+            color: #26e681; /* Яскраво-зелений безпечний час */
+            font-weight: bold;
+            background: #0d1b15;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #135232;
+            display: inline-block;
+            margin-top: 10px !important;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>⏳ КАЛЬКУЛЯТОР для визначення допустимого часу опромінення (при постійній потужності дози випромінювання) </h1>
+    <h1>⏳ Калькулятор допустимого часу опромінення</h1>
 
     <form id="radiationForm">
         <label for="doseRate">Потужність дози випромінювання на місцевості (P, мЗв/год):</label>
@@ -121,59 +157,51 @@
     </form>
 
     <div id="result">
-        <p>Результати розрахунку </p>
+        <p class="res-title">Результати розрахунку</p>
     </div>
 </div>
 
 <script>
+    // МЕХАНІЗМ РОЗРАХУНКУ ЗАЛИШЕНО БЕЗ ЗМІН
     document.getElementById('radiationForm').addEventListener('submit', function(e) {
-        e.preventDefault(); // Запобігаємо стандартній відправці форми
+        e.preventDefault(); 
         calculateTime();
     });
 
     document.getElementById('clearButton').addEventListener('click', function() {
         document.getElementById('radiationForm').reset();
-        document.getElementById('result').innerHTML = '<p>Результати розрахунку.</p>';
+        document.getElementById('result').innerHTML = '<p class="res-title">Результати розрахунку</p>';
     });
 
-    /**
-     * Головна функція для розрахунку часу безпечного перебування.
-     */
     function calculateTime() {
-        const doseRate = parseFloat(document.getElementById('doseRate').value); // Pt (мЗв/год)
-        const totalDose = parseFloat(document.getElementById('totalDose').value); // D (мЗв)
-        const protectionFactor = parseFloat(document.getElementById('protectionFactor').value); // Кз
+        const doseRate = parseFloat(document.getElementById('doseRate').value); 
+        const totalDose = parseFloat(document.getElementById('totalDose').value); 
+        const protectionFactor = parseFloat(document.getElementById('protectionFactor').value); 
 
         const resultDiv = document.getElementById('result');
 
-        // Перевірка на коректність введених даних
         if (isNaN(doseRate) || isNaN(totalDose) || doseRate <= 0 || totalDose <= 0) {
-            resultDiv.innerHTML = '<p style="color: red;">Помилка! Введіть коректні значення (> 0).</p>';
+            resultDiv.innerHTML = '<p style="color: #ff4d4d; font-weight: bold;">Помилка! Введіть коректні значення (> 0).</p>';
             return;
         }
 
-        // 1. Розрахунок фактичної потужності дози з урахуванням захисту
         const actualDoseRate = doseRate / protectionFactor;
-
-        // 2. Розрахунок часу (у годинах)
         const timeInHours = totalDose / actualDoseRate;
 
-        // 3. Конвертація годин у години та хвилини
         const hours = Math.floor(timeInHours);
         const minutesFloat = (timeInHours - hours) * 60;
         const minutes = Math.round(minutesFloat);
 
-        // 4. Форматування та виведення результату
         let outputHTML = `
-            <p><strong>✅ Результати розрахунку</strong></p>
-            <hr style="border-color: #ccc; width: 80%;">
-            <p>Потужність дози з урахуванням Кз: <br>
-               <span style="color: #007bff;">${actualDoseRate.toFixed(3)} мЗв/год</span></p>
-            <p><strong>Рекомендований час:</strong></p>
-            <p style="font-size: 1.4em; color: #4CAF50; margin: 15px 0;">
+            <p class="res-title">✅ Результати розрахунку</p>
+            <hr style="border: 0; border-top: 1px solid #232d42; width: 100%;">
+            <p>Потужність дози з урахуванням Кз:<br>
+               <span class="res-value">${actualDoseRate.toFixed(3)} мЗв/год</span></p>
+            <p><strong>Рекомендований час безпечного перебування:</strong></p>
+            <p class="res-final">
                 ${hours} год ${minutes} хв
             </p>
-            <p style="font-size: 0.9em; color: #666;">
+            <p style="font-size: 0.85em; color: #a0aec0; margin-top: 10px;">
                 (${timeInHours.toFixed(2)} годин)
             </p>
         `;
