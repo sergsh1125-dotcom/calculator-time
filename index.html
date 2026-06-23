@@ -6,22 +6,13 @@
     <title>КАЛЬКУЛЯТОР для визначення допустимого часу опромінення (при постійній потужності дози випромінювання) </title>
     <style>
         /* Стилізація під Платформу ХБРЯ інцидентів */
-        html, body {
-            height: 100%;
-            box-sizing: border-box;
-        }
-
         body {
             font-family: 'Arial', sans-serif;
             background-color: #0b0f19; /* Темний фон платформи */
             color: #ffffff;
             margin: 0;
-            padding: 30px 20px;
+            padding: 20px;
             font-size: 18px;
-            
-            /* ЖОВТА ОКАНТОВКА ПО ПЕРИМЕТРУ ЗАСТОСУНКУ */
-            border: 3px solid #ffd700; 
-            min-height: 100vh;
         }
         
         .container {
@@ -29,7 +20,10 @@
             margin: auto;
             background: #121824; /* Темно-сіра підкладка блоків */
             padding: 25px;
-            border: 1px solid #232d42;
+            
+            /* ЖОВТА ОКАНТОВКА ПАНЕЛІ КАЛЬКУЛЯТОРА */
+            border: 2px solid #ffd700; 
+            
             border-radius: 4px; /* Мінімалістичні закруглення */
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
         }
@@ -172,52 +166,4 @@
 </div>
 
 <script>
-    // МЕХАНІЗМ РОЗРАХУНКУ ЗАЛИШЕНО БЕЗ ЗМІН
-    document.getElementById('radiationForm').addEventListener('submit', function(e) {
-        e.preventDefault(); 
-        calculateTime();
-    });
-
-    document.getElementById('clearButton').addEventListener('click', function() {
-        document.getElementById('radiationForm').reset();
-        document.getElementById('result').innerHTML = '<p class="res-title">Результати розрахунку</p>';
-    });
-
-    function calculateTime() {
-        const doseRate = parseFloat(document.getElementById('doseRate').value); 
-        const totalDose = parseFloat(document.getElementById('totalDose').value); 
-        const protectionFactor = parseFloat(document.getElementById('protectionFactor').value); 
-
-        const resultDiv = document.getElementById('result');
-
-        if (isNaN(doseRate) || isNaN(totalDose) || doseRate <= 0 || totalDose <= 0) {
-            resultDiv.innerHTML = '<p style="color: #ff4d4d; font-weight: bold;">Помилка! Введіть коректні значення (> 0).</p>';
-            return;
-        }
-
-        const actualDoseRate = doseRate / protectionFactor;
-        const timeInHours = totalDose / actualDoseRate;
-
-        const hours = Math.floor(timeInHours);
-        const minutesFloat = (timeInHours - hours) * 60;
-        const minutes = Math.round(minutesFloat);
-
-        let outputHTML = `
-            <p class="res-title">✅ Результати розрахунку</p>
-            <hr style="border: 0; border-top: 1px solid #232d42; width: 100%;">
-            <p>Потужність дози з урахуванням Кз:<br>
-               <span class="res-value">${actualDoseRate.toFixed(3)} мЗв/год</span></p>
-            <p><strong>Рекомендований час безпечного перебування:</strong></p>
-            <p class="res-final">
-                ${hours} год ${minutes} хв
-            </p>
-            <p style="font-size: 0.85em; color: #a0aec0; margin-top: 10px;">
-                (${timeInHours.toFixed(2)} годин)
-            </p>
-        `;
-        resultDiv.innerHTML = outputHTML;
-    }
-</script>
-
-</body>
-</html>
+    // МЕХАНІЗМ РОЗРАХУНКУ ЗАЛИШ
